@@ -1,11 +1,12 @@
 # Setup
 
-## Linux
+## Ubuntu
 
 ```
-curl -o ~/begin-setup.sh \
-    -L https://raw.githubusercontent.com/jakalope/dotfiles2/main/ubuntu_22.04.apt.bash
-cd
-chmod +x begin-setup.sh
-./begin-setup.sh
+pushd
+curl -o setup.ubuntu.bash \
+    -L https://raw.githubusercontent.com/jakalope/dotfiles2/main/setup/linux/setup.ubuntu.bash
+chmod +x setup.ubuntu.bash
+./setup.ubuntu.bash
+popd
 ```
