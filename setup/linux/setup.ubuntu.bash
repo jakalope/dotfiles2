@@ -16,16 +16,13 @@ if [[ ! -e ~/.ssh/id_rsa ]]; then
 fi
 
 apt_install_if_missing git
-apt_install_if_missing neovim
-apt_install_if_missing clang
-
-./nvim.bash
 
 if [[ ! -d ~/dotfiles2 ]]; then
     git clone git@github.com:jakalope/dotfiles2.git ~/dotfiles2
 fi
 
-line_to_append='source "$HOME/dotfiles2/setup/linux/source.me.bash"'
-if ! grep -qF "$line_to_append" ~/.bashrc; then
-    echo "$line_to_append" >> ~/.bashrc
-fi
+./nvim.bash
+apt_install_if_missing clang
+
+append_line_if_missing 'source "$HOME/dotfiles2/setup/linux/source.me.bash"'
+append_line_if_missing 'PATH=$PATH:"$HOME/bin"'

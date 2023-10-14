@@ -9,3 +9,9 @@ apt_install_if_missing() {
         sudo apt install $1
     fi
 }
+
+append_line_if_missing() {
+    if ! grep -qF "$1" ~/.bashrc; then
+        echo "$1" >> ~/.bashrc
+    fi
+}
