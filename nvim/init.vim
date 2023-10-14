@@ -4,3 +4,8 @@ set expandtab   " use spaces instead of tabs
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
+
+call plug#begin('~/.config/nvim/plugged')
+Plug 'williamboman/mason.nvim'
+call plug#end()
+

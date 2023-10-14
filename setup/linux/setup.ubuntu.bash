@@ -17,6 +17,7 @@ fi
 
 apt_install_if_missing git
 apt_install_if_missing neovim
+apt_install_if_missing clang
 
 ./nvim.bash
 
