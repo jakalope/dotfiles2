@@ -22,7 +22,7 @@ if [[ ! -d ~/dotfiles2 ]]; then
 fi
 
 ./nvim.bash
-apt_install_if_missing clang
+apt_install_if_missing unzip
 
 append_line_if_missing 'source "$HOME/dotfiles2/setup/linux/source.me.bash"'
 append_line_if_missing 'PATH=$PATH:"$HOME/bin"'
