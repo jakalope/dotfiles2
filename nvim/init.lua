@@ -1,3 +1,5 @@
+vim.cmd.colorscheme('habamax')  -- set colorscheme
+
 -- Set indentation options
 vim.o.expandtab = true
 vim.o.tabstop = 4
@@ -26,12 +28,17 @@ require("lazy").setup({
 })
 
 local lsp_zero = require('lsp-zero')
-
 lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
+lsp_zero.set_sign_icons({
+  error = '✘',
+  warn = '▲',
+  hint = '⚑',
+  info = '»'
+})
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
@@ -40,3 +47,11 @@ require('mason-lspconfig').setup({
     lsp_zero.default_setup,
   },
 })
+
+-- Productivity Shortcuts
+local n_keymap = function(lhs, rhs)
+    vim.api.nvim_set_keymap('n', lhs, rhs, { noremap = true, silent = true })
+end
+
+n_keymap('<Leader>f', ':lua vim.lsp.buf.definition()<CR>')  -- jump to include
+n_keymap('<Leader>d', ':ClangdSwitchSourceHeader<CR>')      -- jump to source/header
