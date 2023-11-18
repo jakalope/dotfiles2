@@ -53,7 +53,7 @@ vim.o.softtabstop = 4
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.scrolloff = 100000
-vim.o.colorcolumn = 81,161,241,321,401,481,561,641,721,801
+vim.o.colorcolumn = "81,161,241,321,401,481,561,641,721,801"
 
 -- Productivity Shortcuts
 local n_keymap = function(lhs, rhs)
