@@ -17,8 +17,15 @@ fi
 if [ ! -d "$HOME/.config/nvim" ]; then
     # Default XDG_CONFIG_HOME if it isn't already set.
     XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"}
-    mkdir -p "$HOME/.config"
+    mkdir -p "$XDG_CONFIG_HOME"
     ln -s "$HOME/dotfiles2/nvim" "$XDG_CONFIG_HOME/nvim" || true
+fi
+
+if [ ! -d "$HOME/.local/share/nvim/site" ]; then
+    # Default XDG_LOCAL_HOME if it isn't already set.
+    XDG_LOCAL_HOME=${XDG_LOCAL_HOME:-"$HOME/.local"}
+    mkdir -p "$XDG_LOCAL_HOME/share/nvim"
+    ln -s "$HOME/dotfiles2/nvim/site" "$XDG_LOCAL_HOME/share/nvim/" || true
 fi
 
 if [ ! -d ~/.config/nvim/pack/github/start/copilot.vim ]; then
