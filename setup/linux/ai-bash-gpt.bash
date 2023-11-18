@@ -19,3 +19,7 @@ if [ ! -e "$HOME/bin/ai" ]; then
         "$HOME/bin/ai"
     chmod 0755 "$HOME/bin/ai"
 fi
+
+if [ ! -e "$HOME/.openai.key" ]; then
+    echo "Create $HOME/.openai.key with your API key and `chmod 600` it."
+fi

@@ -85,7 +85,7 @@ end
 vim.keymap.set({'n', 'x', 'o'}, 'Mf', '<Plug>(leap-forward-to)')
 vim.keymap.set({'n', 'x', 'o'}, 'MF', '<Plug>(leap-backward-to)')
 
-n_keymap('<Leader>d', ':lua vim.lsp.buf.definition()<CR>')  -- jump include
+n_keymap('<Leader>d', ':lua vim.lsp.buf.definition()<CR>')  -- jump to def
 n_keymap('<Leader>h', ':ClangdSwitchSourceHeader<CR>')      -- jump src/header
 
 n_keymap('<C-j>', '<C-W>j')  -- window below
@@ -93,8 +93,7 @@ n_keymap('<C-k>', '<C-W>k')  -- window above
 n_keymap('<C-h>', '<C-W>h')  -- window left
 n_keymap('<C-l>', '<C-W>l')  -- window right
 
-n_keymap('=', 'o<Esc>')  -- newline below
-n_keymap('+', 'O<Esc>')  -- newline above
+n_keymap('=', 'o<Esc>k')  -- newline below
 
--- Delete buffer without closing the current window
-n_keymap('<Leader>bd', ':lua delete_buffer()<CR>')
+-- Delete the current buffer without closing the current window
+n_keymap('<F9><F9>', ':lua delete_buffer()<CR>')
