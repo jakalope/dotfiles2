@@ -55,3 +55,13 @@ end
 
 n_keymap('<Leader>f', ':lua vim.lsp.buf.definition()<CR>')  -- jump to include
 n_keymap('<Leader>d', ':ClangdSwitchSourceHeader<CR>')      -- jump to source/header
+n_keymap('<C-j>', '<C-W>j')                                 -- move to window below
+n_keymap('<C-k>', '<C-W>k')                                 -- move to window above
+n_keymap('<C-h>', '<C-W>h')                                 -- move to window left
+n_keymap('<C-l>', '<C-W>l')                                 -- move to window right
+
+local t_keymap = function(lhs, rhs)
+    vim.api.nvim_set_keymap('t', lhs, rhs, { noremap = true, silent = true })
+end
+
+t_keymap('<Esc>', '<C-\\><C-n>')  -- exit terminal mode
