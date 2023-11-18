@@ -13,6 +13,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
     "nikvdp/neomux",  -- Control neovim from its terminal and vice versa
+    "ggandor/lightspeed.nvim",  -- Speed up f/F/t/T motions
     "VonHeikemen/lsp-zero.nvim",
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
@@ -49,15 +50,20 @@ vim.fn.setenv('NVIM_LISTEN_ADDRESS', vim.v.servername)
 
 vim.cmd.colorscheme('habamax')  -- set colorscheme
 
-vim.o.expandtab = true
-vim.o.number = true
+vim.o.scrolloff = 100000  -- keep cursor in the middle of the screen
+vim.o.hlsearch = false    -- don't highlight search results
+
+-- show relative line numbers (move via [count]j or [count]k)
 vim.o.relativenumber = true
-vim.o.scrolloff = 100000
 
 -- Set default filetype plugin options (override in site/ftplugin)
-vim.o.tabstop = 4
-vim.o.shiftwidth = 4
-vim.o.softtabstop = 4
+vim.o.expandtab = true    -- use spaces instead of tabs
+vim.o.number = true       -- show line numbers
+vim.o.tabstop = 4         -- width of <Tab> character (used by <Tab> and <BS>)
+vim.o.shiftwidth = 4      -- indent width (used by >> and <<)
+vim.o.softtabstop = 4     -- insert/delete <Space> N chars with <Tab>/<BS>
+
+-- Set a guide bar just past an interval of 80 chars (used by gq)
 vim.o.colorcolumn = "81,161,241,321,401,481,561,641,721,801"
 
 -- Productivity Shortcuts
