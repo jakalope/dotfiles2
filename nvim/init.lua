@@ -12,6 +12,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+    "nikvdp/neomux",  -- Control neovim from its terminal and vice versa
     "VonHeikemen/lsp-zero.nvim",
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
@@ -40,19 +41,23 @@ require('mason-lspconfig').setup({
   },
 })
 
+-- Prepare neovim to be controlled from its terminal via neomux
+vim.fn.setenv('NVIM_LISTEN_ADDRESS', vim.v.servername)
+
 -- Personalization below this line
 --
 
 vim.cmd.colorscheme('habamax')  -- set colorscheme
 
--- Set default options
 vim.o.expandtab = true
-vim.o.tabstop = 4
-vim.o.shiftwidth = 4
-vim.o.softtabstop = 4
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.scrolloff = 100000
+
+-- Set default filetype plugin options (override in site/ftplugin)
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
+vim.o.softtabstop = 4
 vim.o.colorcolumn = "81,161,241,321,401,481,561,641,721,801"
 
 -- Productivity Shortcuts
@@ -60,15 +65,14 @@ local n_keymap = function(lhs, rhs)
     vim.api.nvim_set_keymap('n', lhs, rhs, { noremap = true, silent = true })
 end
 
-n_keymap('<Leader>d', ':lua vim.lsp.buf.definition()<CR>')  -- jump to include
-n_keymap('<Leader>h', ':ClangdSwitchSourceHeader<CR>')      -- jump to source/header
-n_keymap('<C-j>', '<C-W>j')                                 -- move to window below
-n_keymap('<C-k>', '<C-W>k')                                 -- move to window above
-n_keymap('<C-h>', '<C-W>h')                                 -- move to window left
-n_keymap('<C-l>', '<C-W>l')                                 -- move to window right
-
 local t_keymap = function(lhs, rhs)
     vim.api.nvim_set_keymap('t', lhs, rhs, { noremap = true, silent = true })
 end
 
-t_keymap('<Esc>', '<C-\\><C-n>')  -- Exit terminal mode
+n_keymap('<Leader>d', ':lua vim.lsp.buf.definition()<CR>')  -- jump include
+n_keymap('<Leader>h', ':ClangdSwitchSourceHeader<CR>')      -- jump src/header
+n_keymap('<C-j>', '<C-W>j')                                 -- window below
+n_keymap('<C-k>', '<C-W>k')                                 -- window above
+n_keymap('<C-h>', '<C-W>h')                                 -- window left
+n_keymap('<C-l>', '<C-W>l')                                 -- window right
+t_keymap('<Esc>', '<C-\\><C-n>')                            -- Exit term mode

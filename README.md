@@ -13,17 +13,22 @@ popd
 
 # Neovim
 
-## Remappings
+## Help
 
-### Language Server Protocol (LSP)
+```
+:help neomux
+:help lsp-zero-keybindings
+:help copilot-maps
+```
 
-Through `Mason`, I've installed the `clangd` LSP for C++.
-The plugin `lsp-zero` uses the following mapping by default.
-See `:help lsp-zero-keybindings`
-
-### Custom remappings
+## Custom remappings
 
 ```lua
-n_keymap('<Leader>f', ':lua vim.lsp.buf.definition()<CR>')  -- jump to include
-n_keymap('<Leader>d', ':ClangdSwitchSourceHeader<CR>')      -- jump to source/header
+n_keymap('<Leader>d', ':lua vim.lsp.buf.definition()<CR>')  -- jump include
+n_keymap('<Leader>h', ':ClangdSwitchSourceHeader<CR>')      -- jump src/header
+n_keymap('<C-j>', '<C-W>j')                                 -- window below
+n_keymap('<C-k>', '<C-W>k')                                 -- window above
+n_keymap('<C-h>', '<C-W>h')                                 -- window left
+n_keymap('<C-l>', '<C-W>l')                                 -- window right
+t_keymap('<Esc>', '<C-\\><C-n>')                            -- Exit term mode
 ```
