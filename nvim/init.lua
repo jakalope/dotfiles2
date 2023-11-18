@@ -44,6 +44,7 @@ require('mason-lspconfig').setup({
 })
 
 require('setup-clipboard')
+require('buffer-delete')
 
 -- Prepare neovim to be controlled from its terminal via neomux
 vim.fn.setenv('NVIM_LISTEN_ADDRESS', vim.v.servername)
@@ -94,3 +95,6 @@ n_keymap('<C-l>', '<C-W>l')  -- window right
 
 n_keymap('=', 'o<Esc>')  -- newline below
 n_keymap('+', 'O<Esc>')  -- newline above
+
+-- Delete buffer without closing the current window
+n_keymap('<Leader>bd', ':lua delete_buffer()<CR>')

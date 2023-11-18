@@ -85,4 +85,3 @@ end
 
 -- Call the function to detect the environment
 detect_environment()
-
