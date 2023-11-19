@@ -68,6 +68,9 @@ leap.opts.highlight_unlabeled_phase_one_targets = true
 
 vim.cmd.colorscheme('habamax')  -- set colorscheme
 
+-- Red cursor in terminal
+vim.cmd('highlight TermCursor ctermfg=red guifg=red')
+
 vim.o.scrolloff = 100000  -- keep cursor in the middle of the screen
 vim.o.hlsearch = false    -- don't highlight search results
 
@@ -104,7 +107,15 @@ n_keymap('<C-k>', '<C-W>k')  -- window above
 n_keymap('<C-h>', '<C-W>h')  -- window left
 n_keymap('<C-l>', '<C-W>l')  -- window right
 
+t_keymap('<C-j>', '<C-\\><C-n><C-w>j')  -- window below
+t_keymap('<C-k>', '<C-\\><C-n><C-w>k')  -- window above
+t_keymap('<C-h>', '<C-\\><C-n><C-w>h')  -- window left
+t_keymap('<C-l>', '<C-\\><C-n><C-w>l')  -- window right
+
 n_keymap('=', 'o<Esc>k')  -- newline below
 
 -- Delete the current buffer without closing the current window
 n_keymap('<F9><F9>', ':lua delete_buffer()<CR>')
+
+-- Visual block mode when terminal thinks <C-v> is paste
+n_keymap('<C-y>', '<C-v>')
