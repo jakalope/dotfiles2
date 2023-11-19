@@ -29,6 +29,15 @@ require("lazy").setup({
           "MunifTanjim/nui.nvim",
           "3rd/image.nvim", -- See `# Preview Mode` for more information
         }
+    },
+    {
+      "ibhagwan/fzf-lua",
+      -- optional for icon support
+      dependencies = { "nvim-tree/nvim-web-devicons" },
+      config = function()
+        -- calling `setup` is optional for customization
+        require("fzf-lua").setup({})
+      end
     }
 })
 
@@ -57,7 +66,6 @@ require('mason-lspconfig').setup({
 
 require('setup-clipboard')
 require('buffer-delete')
-require('setup-neotree')
 require('bazel')
 
 -- Concatenate the default statusline with the neotree statusline.
@@ -109,6 +117,8 @@ vim.keymap.set({'n', 'x', 'o'}, 'L', '<Plug>(leap-backward-to)')
 
 n_keymap('<Leader>d', ':lua vim.lsp.buf.definition()<CR>')  -- jump to def
 n_keymap('<Leader>h', ':ClangdSwitchSourceHeader<CR>')      -- jump src/header
+vim.keymap.set("n", "<c-P>",
+  "<cmd>lua require('fzf-lua').files()<CR>", { silent = true })
 
 n_keymap('<C-j>', '<C-W>j')  -- window below
 n_keymap('<C-k>', '<C-W>k')  -- window above
