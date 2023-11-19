@@ -15,6 +15,12 @@ popd
 
 ## Help
 
+### Topics I tend to forget
+
+```
+:help formatting
+```
+
 ### Plugin Mappings
 
 ```
@@ -42,6 +48,10 @@ n_keymap('=', 'o<Esc>k')  -- newline below
 
 -- Delete the current buffer without closing the current window
 n_keymap('<F9><F9>', ':lua delete_buffer()<CR>')
+
+n_keymap('<Leader>w1', ':OpenFileAtLineInWindow(1)<CR>')
+...
+n_keymap('<Leader>w9', ':OpenFileAtLineInWindow(9)<CR>')
 ```
 
 ## My common commands
@@ -67,17 +77,12 @@ my_function_call(
 )       ^ enter `d^`
 ```
 
-### `gF`: Open a `file[:line]` pattern to its `file` [and `line`]
+### `gF` & `<Leader>w1`: Open a `file[:line]` pattern to its `file` [and `line`]
 
 This is especially useful with the built-in terminal emulator in newer versions
 of vim and neovim. See `:help terminal`.
 
-For example, open a vim terminal.
-```
-:terminal
-```
-
-Or if you're using neomux (as in this repository),
+Using Neomux, in normal mode, type
 ```
 <Leader>sh
 ```
@@ -87,7 +92,9 @@ such as compiler errors, linters, and file search utilities. The `file` must be
 relative to the current (neo)vim path (aka `vpwd`).
 
 Escape to normal mode within the terminal window (`<C-\><C-n>` or, like with
-neomux, `<C-s>`), move your cursor to the desired `file:line`, and enter `gF`.
+neomux, `<C-s>`), move your cursor to the desired `file:line`, and enter `gF`
+to open it in the current window, or `<Leader>w` and the number of the window
+you'd rather open it in, e.g. `<Leader>w1`.
 
 One handy trick is to always run `vim` or `nvim` from the root of the repository
 you're working within and then use `--full-name` in your various `git` search
@@ -101,6 +108,8 @@ You can set `git` configuration options to always turn these options on.
 git config --global grep.lineNumber true
 git config --global grep.fullName true
 ```
+
+These options are set automatically via `setup/linux/git.config.bash`.
 
 ### `vw [win] <file>`: open `file` [in window `win`] from a Neomux terminal
 
@@ -147,4 +156,11 @@ expression.
 {
  "some_key": "some-value",
         }
+```
+
+## Neovim package development
+
+To load a new package without restarting Neovim,
+```
+:lua package.loaded['my-package'] = loadfile('/path/to/my-package.lua')()
 ```

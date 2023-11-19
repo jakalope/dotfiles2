@@ -1,0 +1,17 @@
+function OpenFileAtLineInWindow(window_number)
+    local file_and_line = vim.fn.expand('<cfile>')
+    vim.api.nvim_command(window_number .. 'wincmd w')
+    local file = vim.fn.matchstr(file_and_line, '^\\S\\+')
+    local line = vim.fn.matchstr(file_and_line, ':\\zs\\d\\+\\ze')
+    vim.api.nvim_command('edit +' .. line .. ' ' .. file)
+end
+
+vim.api.nvim_set_keymap('n', '<Leader>w1', ':lua OpenFileAtLineInWindow(1)<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>w2', ':lua OpenFileAtLineInWindow(2)<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>w3', ':lua OpenFileAtLineInWindow(3)<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>w4', ':lua OpenFileAtLineInWindow(4)<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>w5', ':lua OpenFileAtLineInWindow(5)<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>w6', ':lua OpenFileAtLineInWindow(6)<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>w7', ':lua OpenFileAtLineInWindow(7)<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>w8', ':lua OpenFileAtLineInWindow(8)<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<Leader>w9', ':lua OpenFileAtLineInWindow(9)<CR>', { noremap = true, silent = true })

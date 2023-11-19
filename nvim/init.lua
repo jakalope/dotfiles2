@@ -67,6 +67,7 @@ require('mason-lspconfig').setup({
 require('setup-clipboard')
 require('buffer-delete')
 require('bazel')
+require('nav-to-file')
 
 -- Concatenate the default statusline with the neotree statusline.
 -- When using `vw [win] <file>`, the `win` number is shown in the statusline

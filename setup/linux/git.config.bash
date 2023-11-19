@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Configure only this repository for my private email address.
-git config --local user.name "Jake Askeland"
-git config --local user.email "jake.askeland@gmail.com"
-
 # Configure git to use vim as the default editor.
 git config --global core.editor "nvim"
 
