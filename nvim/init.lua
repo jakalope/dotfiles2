@@ -20,6 +20,16 @@ require("lazy").setup({
     "williamboman/mason-lspconfig.nvim",
     "neovim/nvim-lspconfig",
     "github/copilot.vim",
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+          "nvim-tree/nvim-web-devicons", -- not strictly required
+          "MunifTanjim/nui.nvim",
+          "3rd/image.nvim", -- See `# Preview Mode` for more information
+        }
+    }
 })
 
 local lsp_zero = require('lsp-zero')
@@ -45,6 +55,7 @@ require('mason-lspconfig').setup({
 
 require('setup-clipboard')
 require('buffer-delete')
+require('setup-neotree')
 
 -- Prepare neovim to be controlled from its terminal via neomux
 vim.fn.setenv('NVIM_LISTEN_ADDRESS', vim.v.servername)
