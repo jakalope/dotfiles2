@@ -56,6 +56,7 @@ require('mason-lspconfig').setup({
 require('setup-clipboard')
 require('buffer-delete')
 require('setup-neotree')
+require('bazel')
 
 -- Prepare neovim to be controlled from its terminal via neomux
 vim.fn.setenv('NVIM_LISTEN_ADDRESS', vim.v.servername)
@@ -71,6 +72,7 @@ vim.cmd.colorscheme('habamax')  -- set colorscheme
 -- Red cursor in terminal
 vim.cmd('highlight TermCursor ctermfg=red guifg=red')
 
+vim.o.statusline = ""     -- disable statusline overrides
 vim.o.scrolloff = 100000  -- keep cursor in the middle of the screen
 vim.o.hlsearch = false    -- don't highlight search results
 
@@ -96,8 +98,8 @@ local t_keymap = function(lhs, rhs)
     vim.api.nvim_set_keymap('t', lhs, rhs, { noremap = true, silent = true })
 end
 
-vim.keymap.set({'n', 'x', 'o'}, 'Mf', '<Plug>(leap-forward-to)')
-vim.keymap.set({'n', 'x', 'o'}, 'MF', '<Plug>(leap-backward-to)')
+vim.keymap.set({'n', 'x', 'o'}, 'M', '<Plug>(leap-forward-to)')
+vim.keymap.set({'n', 'x', 'o'}, 'L', '<Plug>(leap-backward-to)')
 
 n_keymap('<Leader>d', ':lua vim.lsp.buf.definition()<CR>')  -- jump to def
 n_keymap('<Leader>h', ':ClangdSwitchSourceHeader<CR>')      -- jump src/header
