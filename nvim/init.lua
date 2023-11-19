@@ -32,6 +32,8 @@ require("lazy").setup({
     }
 })
 
+require'nvim-web-devicons'.get_icons()
+
 local lsp_zero = require('lsp-zero')
 lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
@@ -58,6 +60,11 @@ require('buffer-delete')
 require('setup-neotree')
 require('bazel')
 
+-- Concatenate the default statusline with the neotree statusline.
+-- When using `vw [win] <file>`, the `win` number is shown in the statusline
+vim.o.statusline = '∥ W:[%{WindowNumber()}] ∥ ' ..
+        '%{expand("%:p")}%h%m%r%=%-14.(%l,%c%V%)%P'
+
 -- Prepare neovim to be controlled from its terminal via neomux
 vim.fn.setenv('NVIM_LISTEN_ADDRESS', vim.v.servername)
 
@@ -72,7 +79,6 @@ vim.cmd.colorscheme('habamax')  -- set colorscheme
 -- Red cursor in terminal
 vim.cmd('highlight TermCursor ctermfg=red guifg=red')
 
-vim.o.statusline = ""     -- disable statusline overrides
 vim.o.scrolloff = 100000  -- keep cursor in the middle of the screen
 vim.o.hlsearch = false    -- don't highlight search results
 

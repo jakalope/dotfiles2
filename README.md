@@ -27,8 +27,8 @@ popd
 ### Custom remappings
 
 ```lua
-vim.keymap.set({'n', 'x', 'o'}, 'Mf', '<Plug>(leap-forward-to)')
-vim.keymap.set({'n', 'x', 'o'}, 'MF', '<Plug>(leap-backward-to)')
+vim.keymap.set({'n', 'x', 'o'}, 'M', '<Plug>(leap-forward-to)')
+vim.keymap.set({'n', 'x', 'o'}, 'L', '<Plug>(leap-backward-to)')
 
 n_keymap('<Leader>d', ':lua vim.lsp.buf.definition()<CR>')  -- jump to def
 n_keymap('<Leader>h', ':ClangdSwitchSourceHeader<CR>')      -- jump src/header
@@ -102,4 +102,31 @@ git config --global grep.lineNumber true
 git config --global grep.fullName true
 ```
 
-### `cd "$(vpwd)"`
+### `vw [win] <file>`: open `file` [in window `win`] from a Neomux terminal
+
+Neomux terminals can be opened via `<Leader>sh`. Once open, the commands `e`,
+`vw`, ... from the command line will open files into the window numbered `win`.
+For example, when using `vw [win] <file>`, the `win` number is shown in the
+statusline.
+
+### `cd "$(vpwd)"`: Change directory to neovim's working directory
+
+Within a Neomux terminal, this command will bring you to neovim's current
+working directory. this is handy when using `gF` on the terminal window in
+normal mode.
+
+### Always leave the cursor in the center and use relative numbers to jump
+
+The following settings work together to speed up vertical navigation.
+
+```lua
+vim.o.number = true          -- show line numbers
+vim.o.relativenumber = true  -- line numbers are relative to the cursor
+vim.o.scrolloff = 100000     -- keep cursor in the middle of the screen
+```
+
+Setting `number` and `relativenumber` causes gutter line numbering to be
+relative to the current line. This lets you jump up and down by typing
+`[count]j` or `[count]k` without leaving normal mode. It also normalizes the
+range of numbers you'll type to do such jumps, which is both especially useful
+in large files and reduces mental overhead.
