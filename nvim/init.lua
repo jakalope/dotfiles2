@@ -11,6 +11,11 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Disable some of the default neomux mappings
+vim.g.neomux_yang_buffer_map = ""   -- I'm never going to use this
+vim.g.neomux_paste_buffer_map = ""  -- I'm never going to use this
+vim.g.neomux_term_sizefix_map = ""  -- because <C-w>= is useful
+
 require("lazy").setup({
     "nikvdp/neomux",  -- Control neovim from its terminal and vice versa
     "ggandor/leap.nvim",  -- Speed up f/F/t/T motions
@@ -113,14 +118,14 @@ local t_keymap = function(lhs, rhs)
     vim.api.nvim_set_keymap('t', lhs, rhs, { noremap = true, silent = true })
 end
 
-vim.keymap.set({'n', 'x', 'o'}, 'M', '<Plug>(leap-forward-to)')
-vim.keymap.set({'n', 'x', 'o'}, 'L', '<Plug>(leap-backward-to)')
+-- File navigation
+n_keymap('<Leader>d', ':lua vim.lsp.buf.definition()<CR>') -- jump to def
+n_keymap('<Leader>h', ':ClangdSwitchSourceHeader<CR>')     -- jump src/header
+n_keymap('<Leader>f', ":FzfLua files<CR>")                 -- fuzzy find files
+n_keymap('<Leader>b', ":FzfLua buffers<CR>")               -- fuzzy find buffers
+n_keymap('<Leader><Leader>', ':Neotree toggle<CR>')        -- toggle neotree
 
-n_keymap('<Leader>d', ':lua vim.lsp.buf.definition()<CR>')  -- jump to def
-n_keymap('<Leader>h', ':ClangdSwitchSourceHeader<CR>')      -- jump src/header
-vim.keymap.set("n", "<c-P>",
-  "<cmd>lua require('fzf-lua').files()<CR>", { silent = true })
-
+-- Window navigation
 n_keymap('<C-j>', '<C-W>j')  -- window below
 n_keymap('<C-k>', '<C-W>k')  -- window above
 n_keymap('<C-h>', '<C-W>h')  -- window left
@@ -131,10 +136,17 @@ t_keymap('<C-k>', '<C-\\><C-n><C-w>k')  -- window above
 t_keymap('<C-h>', '<C-\\><C-n><C-w>h')  -- window left
 t_keymap('<C-l>', '<C-\\><C-n><C-w>l')  -- window right
 
+-- Motions
+vim.keymap.set({'n', 'x', 'o'}, 'M', '<Plug>(leap-forward-to)')
+vim.keymap.set({'n', 'x', 'o'}, 'L', '<Plug>(leap-backward-to)')
+
 n_keymap('=', 'o<Esc>k')  -- newline below
+n_keymap('-', 'O<Esc>j')  -- newline above
 
 -- Delete the current buffer without closing the current window
 n_keymap('<F9><F9>', ':lua delete_buffer()<CR>')
 
 -- Visual block mode when terminal thinks <C-v> is paste
 n_keymap('<C-y>', '<C-v>')
+
+-- TODO figure out why neotree icons aren't working
