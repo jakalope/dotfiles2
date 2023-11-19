@@ -130,3 +130,21 @@ relative to the current line. This lets you jump up and down by typing
 `[count]j` or `[count]k` without leaving normal mode. It also normalizes the
 range of numbers you'll type to do such jumps, which is both especially useful
 in large files and reduces mental overhead.
+
+### `<C-p>`: Fuzzy file search with fzf
+
+First, make sure you've installed fzf. There are install files in setup/ for
+linux and darwin. Then use `<C-p>` in normal mode to bring up the fuzzy search
+dialog box.
+
+### `gq{motion}`: Apply formatting
+
+This is especially useful with `mason`, `lsp-zero`, and friends. For example, 
+typing `gqa{` anywhere in the following snippet will format the entire braced
+expression.
+
+```
+{
+ "some_key": "some-value",
+        }
+```
