@@ -11,10 +11,10 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Disable some of the default neomux mappings
-vim.g.neomux_yang_buffer_map = ""   -- I'm never going to use this
-vim.g.neomux_paste_buffer_map = ""  -- I'm never going to use this
-vim.g.neomux_term_sizefix_map = ""  -- because <C-w>= is useful
+-- Effectively disable some of the default neomux mappings
+vim.g.neomux_yank_buffer_map = "<C-=><C-1>"   -- I'm never going to use this
+vim.g.neomux_paste_buffer_map = "<C-=><C-2>"  -- I'm never going to use this
+vim.g.neomux_term_sizefix_map = "<C-=><C-3>"  -- because <C-w>= is useful
 
 require("lazy").setup({
     "nikvdp/neomux",  -- Control neovim from its terminal and vice versa
