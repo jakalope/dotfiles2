@@ -12,9 +12,9 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Effectively disable some of the default neomux mappings
-vim.g.neomux_yank_buffer_map = "<C-=><C-1>"   -- I'm never going to use this
-vim.g.neomux_paste_buffer_map = "<C-=><C-2>"  -- I'm never going to use this
-vim.g.neomux_term_sizefix_map = "<C-=><C-3>"  -- because <C-w>= is useful
+vim.g.neomux_yank_buffer_map = "<Plug><C-1>"   -- I'm never going to use this
+vim.g.neomux_paste_buffer_map = "<Plug><C-2>"  -- I'm never going to use this
+vim.g.neomux_term_sizefix_map = "<Plug><C-3>"  -- because <C-w>= is useful
 
 require("lazy").setup({
     "nikvdp/neomux",  -- Control neovim from its terminal and vice versa
@@ -135,6 +135,7 @@ t_keymap('<C-j>', '<C-\\><C-n><C-w>j')  -- window below
 t_keymap('<C-k>', '<C-\\><C-n><C-w>k')  -- window above
 t_keymap('<C-h>', '<C-\\><C-n><C-w>h')  -- window left
 t_keymap('<C-l>', '<C-\\><C-n><C-w>l')  -- window right
+t_keymap('<C-u>', '<C-\\><C-n><C-u>')   -- page up
 
 -- Motions
 vim.keymap.set({'n', 'x', 'o'}, '\'m', '<Plug>(leap-forward-to)')
