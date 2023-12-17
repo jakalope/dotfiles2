@@ -137,8 +137,8 @@ t_keymap('<C-h>', '<C-\\><C-n><C-w>h')  -- window left
 t_keymap('<C-l>', '<C-\\><C-n><C-w>l')  -- window right
 
 -- Motions
-vim.keymap.set({'n', 'x', 'o'}, 'M', '<Plug>(leap-forward-to)')
-vim.keymap.set({'n', 'x', 'o'}, 'L', '<Plug>(leap-backward-to)')
+vim.keymap.set({'n', 'x', 'o'}, '\'m', '<Plug>(leap-forward-to)')
+vim.keymap.set({'n', 'x', 'o'}, '\'l', '<Plug>(leap-backward-to)')
 
 n_keymap('=', 'o<Esc>k')  -- newline below
 n_keymap('-', 'O<Esc>j')  -- newline above
