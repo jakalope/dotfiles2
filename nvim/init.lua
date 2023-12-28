@@ -151,3 +151,5 @@ n_keymap('<F9><F9>', ':lua delete_buffer()<CR>')
 n_keymap('<C-y>', '<C-v>')
 
 -- TODO figure out why neotree icons aren't working
+-- TODO determine why shift-<Space> in a terminal window is causing strange
+--      behavior
