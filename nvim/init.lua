@@ -138,8 +138,8 @@ t_keymap('<C-l>', '<C-\\><C-n><C-w>l')  -- window right
 t_keymap('<C-u>', '<C-\\><C-n><C-u>')   -- page up
 
 -- Motions
-vim.keymap.set({'n', 'x', 'o'}, '\'m', '<Plug>(leap-forward-to)')
-vim.keymap.set({'n', 'x', 'o'}, '\'l', '<Plug>(leap-backward-to)')
+vim.keymap.set({'n', 'x', 'o'}, '<C-f>', '<Plug>(leap-forward-to)')
+vim.keymap.set({'n', 'x', 'o'}, '<Plug><C-d>', '<Plug>(leap-backward-to)')
 
 n_keymap('=', 'o<Esc>k')  -- newline below
 n_keymap('-', 'O<Esc>j')  -- newline above
