@@ -54,6 +54,30 @@ n_keymap('<Leader>w1', ':OpenFileAtLineInWindow(1)<CR>')
 n_keymap('<Leader>w9', ':OpenFileAtLineInWindow(9)<CR>')
 ```
 
+## Python Language Server Protocol (LSP) Setup
+
+Per machine, install `pyright` LSP, `black` linter, and `debugpy` debugging
+assistant.
+```
+:MasonInstall pyright
+:MasonInstall black
+:MasonInstall debugpy
+```
+
+Per project, add a file `pyrightconfig.json` to the root folder. Add the
+following to it. If you put your virtual environment somewhere other than
+your project folder, you'd specify the path via `venvPath`. If you name it
+something other than `venv`, you'd supply that name in the `venv` parameter.
+
+```
+{
+    "venvPath": "./",
+    "venv": "venv"
+}
+```
+
+After calling `pip install`, use `:LspRestart` for changes to take effect.
+
 ## My common commands
 
 ### `d^`: Delete until first non-whitespace character
