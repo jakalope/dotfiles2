@@ -122,6 +122,7 @@ end
 n_keymap('<Leader>d', ':lua vim.lsp.buf.definition()<CR>') -- jump to def
 n_keymap('<Leader>h', ':ClangdSwitchSourceHeader<CR>')     -- jump src/header
 n_keymap('<Leader>f', ":FzfLua files<CR>")                 -- fuzzy find files
+n_keymap('<Leader>g', ":FzfLua git_files<CR>")             -- fuzzy find git
 n_keymap('<Leader>b', ":FzfLua buffers<CR>")               -- fuzzy find buffers
 n_keymap('<Leader><Leader>', ':Neotree toggle<CR>')        -- toggle neotree
 
@@ -139,13 +140,13 @@ t_keymap('<C-u>', '<C-\\><C-n><C-u>')   -- page up
 
 -- Motions
 vim.keymap.set({'n', 'x', 'o'}, '<C-f>', '<Plug>(leap-forward-to)')
-vim.keymap.set({'n', 'x', 'o'}, '<Plug><C-d>', '<Plug>(leap-backward-to)')
+vim.keymap.set({'n', 'x', 'o'}, '<C-g>', '<Plug>(leap-backward-to)')
 
 n_keymap('=', 'o<Esc>k')  -- newline below
-n_keymap('-', 'O<Esc>j')  -- newline above
+n_keymap('+', 'O<Esc>j')  -- newline above
 
 -- Delete the current buffer without closing the current window
-n_keymap('<F9><F9>', ':lua delete_buffer()<CR>')
+n_keymap('<F9><F9>', ':lua delete_buffer()<CR>:e #<CR>')
 
 -- Visual block mode when terminal thinks <C-v> is paste
 n_keymap('<C-y>', '<C-v>')
