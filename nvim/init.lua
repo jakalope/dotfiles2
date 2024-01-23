@@ -137,6 +137,7 @@ t_keymap('<C-k>', '<C-\\><C-n><C-w>k')  -- window above
 t_keymap('<C-h>', '<C-\\><C-n><C-w>h')  -- window left
 t_keymap('<C-l>', '<C-\\><C-n><C-w>l')  -- window right
 t_keymap('<C-u>', '<C-\\><C-n><C-u>')   -- page up
+t_keymap('<S-Space>', '<Plug>')         -- disable shift-space in iterm2
 
 -- Motions
 vim.keymap.set({'n', 'x', 'o'}, '<C-f>', '<Plug>(leap-forward-to)')
