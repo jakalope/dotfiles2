@@ -146,7 +146,7 @@ n_keymap('=', 'o<Esc>k')  -- newline below
 n_keymap('+', 'O<Esc>j')  -- newline above
 
 -- Delete the current buffer without closing the current window
-n_keymap('<F9><F9>', ':lua delete_buffer()<CR>:e #<CR>')
+n_keymap('<F9><F9>', ':lua delete_buffer()<CR><C-o>')
 
 -- Visual block mode when terminal thinks <C-v> is paste
 n_keymap('<C-y>', '<C-v>')
