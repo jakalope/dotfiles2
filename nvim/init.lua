@@ -88,7 +88,7 @@ leap.opts.highlight_unlabeled_phase_one_targets = true
 -- Personalization below this line
 --
 
-vim.cmd.colorscheme('habamax')  -- set colorscheme
+vim.cmd.colorscheme('slate')  -- set colorscheme
 
 -- Red cursor in terminal
 vim.cmd('highlight TermCursor ctermfg=red guifg=red')
