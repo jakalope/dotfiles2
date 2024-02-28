@@ -4,9 +4,28 @@ vim.o.tabstop = 4         -- width of <Tab> character (used by <Tab> and <BS>)
 vim.o.shiftwidth = 4      -- indent width (used by >> and <<)
 vim.o.softtabstop = 4     -- insert/delete <Space> N chars with <Tab>/<BS>
 
--- Set a guide bar just past an interval of 79 (pep8) chars (used by gq)
-vim.o.colorcolumn = "80,160,240,320,400,480,560,640,720,800"
-
 -- Show relative line numbers (move via [count]j or [count]k)
 vim.o.relativenumber = true
 
+local function set_colorcolumn_from_pycodestyle()
+    local handle = io.popen("grep '^max-line-length' ~/.config/pycodestyle | cut -d '=' -f2 | tr -d ' '")
+    local max_length = handle:read("*a")
+    handle:close()
+
+    max_length = max_length:gsub("%s+", "")
+    max_length = tonumber(max_length) or 80  -- Use 80 as default if conversion fails
+
+    -- Calculate colorcolumn positions at intervals of max_length
+    local columns = {}
+    for i = 1, 10 do  -- Assuming you won't need more than 10 intervals
+        table.insert(columns, i * max_length)
+        if i * max_length > 500 then  -- Assuming a reasonable max width to avoid performance issues
+            break
+        end
+    end
+
+    -- Join the column positions with commas for the 'colorcolumn' option
+    vim.o.colorcolumn = table.concat(columns, ",")
+end
+
+set_colorcolumn_from_pycodestyle()
