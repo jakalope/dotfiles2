@@ -19,6 +19,7 @@ vim.g.neomux_term_sizefix_map = "<Plug><C-3>"  -- because <C-w>= is useful
 require("lazy").setup({
     "nikvdp/neomux",  -- Control neovim from its terminal and vice versa
     "ggandor/leap.nvim",  -- Speed up f/F/t/T motions
+    -- "justinmk/vim-sneak",  -- Speed up f/F/t/T motions
     "tpope/vim-repeat",  -- Make plugins repeatable with . (leap dep)
     "VonHeikemen/lsp-zero.nvim",
     "williamboman/mason.nvim",
@@ -82,8 +83,8 @@ vim.o.statusline = '∥ W:[%{WindowNumber()}] ∥ ' ..
 -- Prepare neovim to be controlled from its terminal via neomux
 vim.fn.setenv('NVIM_LISTEN_ADDRESS', vim.v.servername)
 
-local leap = require('leap')
-leap.opts.highlight_unlabeled_phase_one_targets = true
+--local leap = require('leap')
+--leap.opts.highlight_unlabeled_phase_one_targets = true
 
 -- Personalization below this line
 --
