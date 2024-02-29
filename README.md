@@ -13,6 +13,16 @@ popd
 
 # Neovim
 
+## SSH Copy/Paste Support
+
+See `:help clipboard-tool`.
+
+Lemonade with port forwarding:
+```
+lemonade server -allow 127.0.0.1 &
+ssh -R 2489:127.0.0.1:2489 user@host
+```
+
 ## Help
 
 ### Topics I tend to forget
@@ -180,6 +190,14 @@ expression.
 {
  "some_key": "some-value",
         }
+```
+
+### Open files changed in the most recent commit
+
+The following lists all the most recently changed files and opens them in window
+two.
+```
+for f in $(git diff-tree --no-commit-id --name-only -r HEAD); do vw 2 $f; done
 ```
 
 ## Neovim package development

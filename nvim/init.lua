@@ -17,10 +17,12 @@ vim.g.neomux_paste_buffer_map = "<Plug><C-2>"  -- I'm never going to use this
 vim.g.neomux_term_sizefix_map = "<Plug><C-3>"  -- because <C-w>= is useful
 
 require("lazy").setup({
+    "tpope/vim-abolish",  -- Change word case (e.g. crs for snake_case)
     "nikvdp/neomux",  -- Control neovim from its terminal and vice versa
     "ggandor/leap.nvim",  -- Speed up f/F/t/T motions
     -- "justinmk/vim-sneak",  -- Speed up f/F/t/T motions
     "tpope/vim-repeat",  -- Make plugins repeatable with . (leap dep)
+    "moll/vim-bbye",  -- Bdelete, remove buffers w/o affecting splits
     "VonHeikemen/lsp-zero.nvim",
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
@@ -62,13 +64,16 @@ lsp_zero.set_sign_icons({
   info = '»'
 })
 
-require('mason').setup({})
+require('mason').setup({
+  PATH = "append",  -- Search venv path before masonpath when looking for config
+})
 require('mason-lspconfig').setup({
   ensure_installed = {},
   handlers = {
     lsp_zero.default_setup,
   },
 })
+
 
 require('setup-clipboard')
 require('buffer-delete')
@@ -89,12 +94,11 @@ vim.fn.setenv('NVIM_LISTEN_ADDRESS', vim.v.servername)
 -- Personalization below this line
 --
 
-vim.cmd.colorscheme('habamax')  -- set colorscheme
+vim.cmd.colorscheme('slate')  -- set colorscheme
 
 -- Red cursor in terminal
 vim.cmd('highlight TermCursor ctermfg=red guifg=red')
 
-vim.o.scrolloff = 100000  -- keep cursor in the middle of the screen
 vim.o.hlsearch = false    -- don't highlight search results
 
 -- Set default filetype plugin options (override in site/ftplugin)
@@ -109,6 +113,21 @@ vim.o.colorcolumn = "81,161,241,321,401,481,561,641,721,801"
 
 -- Show relative line numbers (move via [count]j or [count]k)
 vim.o.relativenumber = true
+
+vim.o.scrolloff = 100000  -- keep cursor in the middle of the screen
+
+-- Autocommand to set scrolloff for non-terminal buffers
+-- Fixes scrolloff reset when entering a buffer via "gf" from terminal-normal
+vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = "*",
+    callback = function()
+        -- Check if the buffer is not a terminal buffer
+        if vim.bo.buftype ~= "terminal" then
+            -- Set scrolloff to 10000 for non-terminal buffers
+            vim.wo.scrolloff = 10000
+        end
+    end,
+})
 
 -- Productivity Shortcuts
 local n_keymap = function(lhs, rhs)
@@ -125,6 +144,7 @@ n_keymap('<Leader>h', ':ClangdSwitchSourceHeader<CR>')     -- jump src/header
 n_keymap('<Leader>f', ":FzfLua files<CR>")                 -- fuzzy find files
 n_keymap('<Leader>g', ":FzfLua git_files<CR>")             -- fuzzy find git
 n_keymap('<Leader>b', ":FzfLua buffers<CR>")               -- fuzzy find buffers
+n_keymap('<leader>s', ":Neotree float git_status<cr>")
 n_keymap('<Leader><Leader>', ':Neotree toggle<CR>')        -- toggle neotree
 
 -- Window navigation
@@ -148,10 +168,16 @@ n_keymap('=', 'o<Esc>k')  -- newline below
 n_keymap('+', 'O<Esc>j')  -- newline above
 
 -- Delete the current buffer without closing the current window
-n_keymap('<F9><F9>', ':lua delete_buffer()<CR><C-o>')
+n_keymap('<F9><F9>', ':Bdelete<CR>')
+
+-- Source this file
+n_keymap('<F12>', ':source ~/dotfiles2/nvim/init.lua<CR>')
 
 -- Visual block mode when terminal thinks <C-v> is paste
 n_keymap('<C-y>', '<C-v>')
+
+-- Copy the name of the current file
+n_keymap('_y', ':let @"=@%<CR>:let @+=@%<CR>')
 
 -- TODO figure out why neotree icons aren't working
 -- TODO determine why shift-<Space> in a terminal window is causing strange

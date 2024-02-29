@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+echo Creating folders...
 mkdir -p ~/bin
 mkdir -p ~/nvim-install
+
 if [ ! -d ~/nvim-install/squashfs-root ]; then
+    echo Downloading latest neovim...
     pushd ~/nvim-install
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
     chmod u+x nvim.appimage
@@ -15,6 +18,7 @@ fi
 
 # Create a softlink to the git managed copy of the nvim directory.
 if [ ! -d "$HOME/.config/nvim" ]; then
+    echo Linking neovim config...
     # Default XDG_CONFIG_HOME if it isn't already set.
     XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"}
     mkdir -p "$XDG_CONFIG_HOME"
@@ -22,6 +26,7 @@ if [ ! -d "$HOME/.config/nvim" ]; then
 fi
 
 if [ ! -d "$HOME/.local/share/nvim/site" ]; then
+    echo Linking neovim plugins...
     # Default XDG_LOCAL_HOME if it isn't already set.
     XDG_LOCAL_HOME=${XDG_LOCAL_HOME:-"$HOME/.local"}
     mkdir -p "$XDG_LOCAL_HOME/share/nvim"
@@ -29,15 +34,18 @@ if [ ! -d "$HOME/.local/share/nvim/site" ]; then
 fi
 
 if [ ! -d ~/.config/nvim/pack/github/start/copilot.vim ]; then
+    echo Installing copilot...
     git clone https://github.com/github/copilot.vim \
        ~/.config/nvim/pack/github/start/copilot.vim
 fi
 
 if [ ! -d ~/.config/nvim/autoload/plug.vim ]; then
+    echo Installing vim-plug...
     sh -c 'curl -fLo \
         ~/.config/nvim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 fi
 
 # Ensure Node.js version 16 or greater is isntalled
+echo Updating nodejs...
 ./nodejs.bash
