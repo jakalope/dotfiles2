@@ -12,6 +12,16 @@ tls() {
     tmux list-sessions
 }
 
+# Print all untracked files.
+untracked() {
+    git status --porcelain --untracked=all | awk '{print $2}'
+}
+
+# Print all added and modified files [since revision $1]
+modified() {
+    git status --porcelain $1 | grep -v '^.[D\?]' | awk '{print $2}'
+}
+
 # Modified from neomux funcs.sh
 # (vw from the command line) -- open a file in the window with the specified number
 vims() {
