@@ -94,7 +94,7 @@ vim.fn.setenv('NVIM_LISTEN_ADDRESS', vim.v.servername)
 -- Personalization below this line
 --
 
-vim.cmd.colorscheme('slate')  -- set colorscheme
+--vim.cmd.colorscheme('slate')  -- set colorscheme
 
 -- Red cursor in terminal
 vim.cmd('highlight TermCursor ctermfg=red guifg=red')
@@ -161,8 +161,8 @@ t_keymap('<C-u>', '<C-\\><C-n><C-u>')   -- page up
 t_keymap('<S-Space>', '<Plug>')         -- disable shift-space in iterm2
 
 -- Motions
-vim.keymap.set({'n', 'x', 'o'}, '<C-f>', '<Plug>(leap-forward-to)')
-vim.keymap.set({'n', 'x', 'o'}, '<C-g>', '<Plug>(leap-backward-to)')
+vim.keymap.set({'n', 'x', 'o'}, 'z', '<Plug>(leap-forward)')
+vim.keymap.set({'n', 'x', 'o'}, 'Z', '<Plug>(leap-backward)')
 
 n_keymap('=', 'o<Esc>k')  -- newline below
 n_keymap('+', 'O<Esc>j')  -- newline above
@@ -178,6 +178,9 @@ n_keymap('<C-y>', '<C-v>')
 
 -- Copy the name of the current file
 n_keymap('_y', ':let @"=@%<CR>:let @+=@%<CR>')
+
+-- Copy the name of the current file:line; useful for setting breakpoints
+n_keymap('_b', [[:let @+ = expand('%:~:.') . ':' . line('.')<CR>]])
 
 -- TODO figure out why neotree icons aren't working
 -- TODO determine why shift-<Space> in a terminal window is causing strange
