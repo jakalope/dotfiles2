@@ -21,6 +21,10 @@ tls() {
     tmux list-sessions
 }
 
+gitsubject() {
+    git log --pretty=oneline --abbrev-commit --max-count=1
+}
+
 # Print all untracked files.
 untracked() {
     git status --porcelain | grep '^\?' | awk '{print $2}'
