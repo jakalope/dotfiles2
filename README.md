@@ -11,6 +11,51 @@ chmod +x setup.ubuntu.bash
 popd
 ```
 
+# Remote Work
+
+## Open neovim
+```
+mosh $REMOTE
+cd <workspace_dir>
+tjs    # TMUX join session (or start a new one)
+nvim
+:vs<CR>
+<leader>sh  # start a shell
+```
+
+## Copy text from remote neovim to the local host
+
+```
+_z   # to open a new tab, turn off gutter and mouse interaction
+<use mouse to select>
+<Command-C>
+```
+
+Note: lemonade can be tempermental
+
+## Move forward/backward one word in command prompt
+
+Configure terminal emulator to treat option as meta. 
+Then use `<Meta-F>` and `<Meta-B>`.
+
+# Gerrit
+
+## Workflows
+
+### Modify code from a CL
+
+```
+git review -d <CL-id>
+git checkout -
+git worktree add ../<CL-id> review/<users-gerrit-name>/<CL-id>
+```
+
+_Do work_
+
+```
+git worktree remove review/<users-gerrit-name>/<CL-id>
+```
+
 # Neovim
 
 ## SSH Copy/Paste Support

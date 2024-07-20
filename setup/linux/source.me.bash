@@ -1,5 +1,10 @@
 # Intended to be sourced via ~/.bashrc
 
+git_context_search() {
+    local this_directory_path=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
+    $this_directory_path/../../scripts/git_context_search.py "$@"
+}
+
 gitroot() {
     git rev-parse --show-toplevel
 }
@@ -8,8 +13,34 @@ gcd() {
     cd $(gitroot)
 }
 
+gpushd() {
+    pushd $(gitroot)
+}
+
 tls() {
     tmux list-sessions
+}
+
+gitsubject() {
+    git log --pretty=oneline --abbrev-commit --max-count=1
+}
+
+# Print all untracked files.
+untracked() {
+    git status --porcelain | grep '^\?' | awk '{print $2}'
+}
+
+# Print all added and modified files [since refspec]
+# For example, to see the files changed since two commits ago, run
+#   $ modified HEAD~2
+modified() {
+    git diff --name-status "$@" | grep -v '^[D\?]' | awk '{print $2}'
+}
+
+# Print all files modified or untracked.
+inprogress() {
+    untracked
+    modified "$@"
 }
 
 # Modified from neomux funcs.sh
@@ -17,13 +48,17 @@ tls() {
 vims() {
     # remote nvim open file $2 in window $1
     local win="$1"
-    local file="$2"
-    if [[ "$file" == "-" ]]; then
-        for line in $(cat); do 
-            nvr -cc "${win}wincmd w" -c "e $(abspath "$line")"
+    local file_line="$2"
+    if [[ "$file_line" == "-" ]]; then
+        for listing in $(cat); do
+            local file="${listing%%:*}"
+            local line="${listing##*:}"
+            nvr -cc "${win}wincmd w" -c "e $(abspath "$file")" -c "$line"
         done
     else
-        nvr -cc "${win}wincmd w" -c "e $(abspath "$file")"
+        local file="${file_line%%:*}"
+        local line="${file_line##*:}"
+        nvr -cc "${win}wincmd w" -c "e $(abspath "$file")" -c "$line"
     fi
 }
 

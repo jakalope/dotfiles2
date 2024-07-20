@@ -17,6 +17,7 @@ vim.g.neomux_paste_buffer_map = "<Plug><C-2>"  -- I'm never going to use this
 vim.g.neomux_term_sizefix_map = "<Plug><C-3>"  -- because <C-w>= is useful
 
 require("lazy").setup({
+    "tpope/vim-fugitive", -- Git integration
     "tpope/vim-abolish",  -- Change word case (e.g. crs for snake_case)
     "nikvdp/neomux",  -- Control neovim from its terminal and vice versa
     "ggandor/leap.nvim",  -- Speed up f/F/t/T motions
@@ -106,9 +107,8 @@ vim.fn.setenv('NVIM_LISTEN_ADDRESS', vim.v.servername)
 --
 
 vim.cmd.colorscheme('slate')  -- set colorscheme
-
--- Red cursor in terminal
 vim.cmd('highlight TermCursor ctermfg=red guifg=red')
+vim.cmd('highlight Cursor ctermfg=yellow guifg=yellow')
 
 vim.o.hlsearch = false    -- don't highlight search results
 
@@ -145,9 +145,26 @@ local n_keymap = function(lhs, rhs)
     vim.api.nvim_set_keymap('n', lhs, rhs, { noremap = true, silent = true })
 end
 
+local i_keymap = function(lhs, rhs)
+    vim.api.nvim_set_keymap('i', lhs, rhs, { noremap = true, silent = true })
+end
+
 local t_keymap = function(lhs, rhs)
     vim.api.nvim_set_keymap('t', lhs, rhs, { noremap = true, silent = true })
 end
+
+-- Map _z to open a tab that's easy to copy from when using SSH
+vim.api.nvim_set_keymap('n', '_z', '', {
+    noremap = true,
+    callback = function()
+        vim.cmd("set mouse=")
+        vim.cmd("tabnew %")
+        vim.wo.number = false
+        vim.wo.relativenumber = false
+        vim.wo.signcolumn = "no"
+        vim.wo.foldcolumn = "0"
+    end
+})
 
 -- File navigation
 n_keymap('<Leader>d', ':lua vim.lsp.buf.definition()<CR>') -- jump to def
@@ -164,6 +181,11 @@ n_keymap('<C-k>', '<C-W>k')  -- window above
 n_keymap('<C-h>', '<C-W>h')  -- window left
 n_keymap('<C-l>', '<C-W>l')  -- window right
 
+i_keymap('<C-j>', '<Esc><C-W>j')  -- window below
+i_keymap('<C-k>', '<Esc><C-W>k')  -- window above
+i_keymap('<C-h>', '<Esc><C-W>h')  -- window left
+i_keymap('<C-l>', '<Esc><C-W>l')  -- window right
+
 t_keymap('<C-j>', '<C-\\><C-n><C-w>j')  -- window below
 t_keymap('<C-k>', '<C-\\><C-n><C-w>k')  -- window above
 t_keymap('<C-h>', '<C-\\><C-n><C-w>h')  -- window left
@@ -172,11 +194,19 @@ t_keymap('<C-u>', '<C-\\><C-n><C-u>')   -- page up
 t_keymap('<S-Space>', '<Plug>')         -- disable shift-space in iterm2
 
 -- Motions
-vim.keymap.set({'n', 'x', 'o'}, '<C-f>', '<Plug>(leap-forward-to)')
-vim.keymap.set({'n', 'x', 'o'}, '<C-g>', '<Plug>(leap-backward-to)')
+vim.keymap.set({'n', 'x', 'o'}, 'z', '<Plug>(leap-forward)')
+vim.keymap.set({'n', 'x', 'o'}, 'Z', '<Plug>(leap-backward)')
 
 n_keymap('=', 'o<Esc>k')  -- newline below
 n_keymap('+', 'O<Esc>j')  -- newline above
+
+-- Terminal search
+t_keymap('<F4>', '<C-\\><C-n>?ERROR:.*<CR>/.* error:<CR>0')
+n_keymap('<F4>', '?ERROR:.*<CR>/.* error:<CR>0')
+
+-- Remap <C-d> in terminal so we don't accidentally close the shell
+t_keymap('<C-d>', '<Plug>x')
+t_keymap('<C-;>', '<C-d>')
 
 -- Delete the current buffer without closing the current window
 n_keymap('<F9><F9>', ':Bdelete<CR>')
@@ -189,6 +219,9 @@ n_keymap('<C-y>', '<C-v>')
 
 -- Copy the name of the current file
 n_keymap('_y', ':let @"=@%<CR>:let @+=@%<CR>')
+
+-- Copy the name of the current file:line; useful for setting breakpoints
+n_keymap('_b', [[:let @+ = expand('%:~:.') . ':' . line('.')<CR>]])
 
 -- TODO figure out why neotree icons aren't working
 -- TODO determine why shift-<Space> in a terminal window is causing strange
