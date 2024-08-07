@@ -53,12 +53,18 @@ vims() {
         for listing in $(cat); do
             local file="${listing%%:*}"
             local line="${listing##*:}"
-            nvr -cc "${win}wincmd w" -c "e $(abspath "$file")" -c "$line"
+            if [[ $line != "" ]]; then
+                line="-c $line"
+            fi
+            nvr -cc "${win}wincmd w" -c "e $(abspath "$file")" "$line"
         done
     else
         local file="${file_line%%:*}"
         local line="${file_line##*:}"
-        nvr -cc "${win}wincmd w" -c "e $(abspath "$file")" -c "$line"
+        if [[ $line != "" ]]; then
+            line="-c $line"
+        fi
+        nvr -cc "${win}wincmd w" -c "e $(abspath "$file")" "$line"
     fi
 }
 

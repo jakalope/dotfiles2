@@ -38,7 +38,7 @@ require("lazy").setup({
           "MunifTanjim/nui.nvim",
           "3rd/image.nvim", -- See `# Preview Mode` for more information
         }
-    },
+    },-- 📂
     {
       "ibhagwan/fzf-lua",
       -- optional for icon support
@@ -126,6 +126,19 @@ vim.o.colorcolumn = "81,161,241,321,401,481,561,641,721,801"
 vim.o.relativenumber = true
 
 vim.o.scrolloff = 100000  -- keep cursor in the middle of the screen
+
+-- Function to trim trailing whitespace
+local function trim_trailing_whitespace()
+  local current_view = vim.fn.winsaveview()
+  vim.cmd([[%s/\s\+$//e]])
+  vim.fn.winrestview(current_view)
+end
+
+-- Autocommand to trim trailing whitespace on buffer write
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*",
+  callback = trim_trailing_whitespace
+})
 
 -- Autocommand to set scrolloff for non-terminal buffers
 -- Fixes scrolloff reset when entering a buffer via "gf" from terminal-normal
