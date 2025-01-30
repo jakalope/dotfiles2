@@ -13,6 +13,27 @@ popd
 
 # Remote Work
 
+## Tunnel into REMOTE and launch neovim server
+
+```
+ssh -L 2489:localhost:2489 $REMOTE \
+    /home/jaskeland/bin/nvim --listen localhost:2489 --headless
+```
+
+## Open Neovide locally and connect to server
+
+```
+/Applications/Neovide.app/Contents/MacOS/neovide --server localhost:2489
+```
+
+- Open vertical splits `:vs:vs`
+- Start a shell on one split `\sh`
+- Open a horizontal split `:sp`
+- Start a shell there `\sh`
+- Start aichat `aichat<CR>`
+
+# Old Remote work
+
 ## Open neovim
 ```
 mosh $REMOTE
@@ -35,7 +56,7 @@ Note: lemonade can be tempermental
 
 ## Move forward/backward one word in command prompt
 
-Configure terminal emulator to treat option as meta. 
+Configure terminal emulator to treat option as meta.
 Then use `<Meta-F>` and `<Meta-B>`.
 
 # Gerrit
@@ -227,7 +248,7 @@ dialog box.
 
 ### `gq{motion}`: Apply formatting
 
-This is especially useful with `mason`, `lsp-zero`, and friends. For example, 
+This is especially useful with `mason`, `lsp-zero`, and friends. For example,
 typing `gqa{` anywhere in the following snippet will format the entire braced
 expression.
 

@@ -16,9 +16,17 @@ vim.g.neomux_yank_buffer_map = "<Plug><C-1>"   -- I'm never going to use this
 vim.g.neomux_paste_buffer_map = "<Plug><C-2>"  -- I'm never going to use this
 vim.g.neomux_term_sizefix_map = "<Plug><C-3>"  -- because <C-w>= is useful
 
+vim.g.neovide_scroll_animation_far_lines = 0
+
 require("lazy").setup({
     "tpope/vim-fugitive", -- Git integration
     "tpope/vim-abolish",  -- Change word case (e.g. crs for snake_case)
+    {
+        'jedrzejboczar/possession.nvim',
+        dependencies = {
+            'nvim-lua/plenary.nvim'
+        },
+    },
     "nikvdp/neomux",  -- Control neovim from its terminal and vice versa
     "ggandor/leap.nvim",  -- Speed up f/F/t/T motions
     -- "justinmk/vim-sneak",  -- Speed up f/F/t/T motions
@@ -33,10 +41,10 @@ require("lazy").setup({
         "nvim-neo-tree/neo-tree.nvim",
         branch = "v3.x",
         dependencies = {
-          "nvim-lua/plenary.nvim",
-          "nvim-tree/nvim-web-devicons", -- not strictly required
-          "MunifTanjim/nui.nvim",
-          "3rd/image.nvim", -- See `# Preview Mode` for more information
+            "nvim-lua/plenary.nvim",
+            "nvim-tree/nvim-web-devicons", -- not strictly required
+            "MunifTanjim/nui.nvim",
+            "3rd/image.nvim", -- See `# Preview Mode` for more information
         }
     },-- 📂
     {
@@ -47,10 +55,80 @@ require("lazy").setup({
         -- calling `setup` is optional for customization
         require("fzf-lua").setup({})
       end
+    },
+    {
+      "yetone/avante.nvim",
+      event = "VeryLazy",
+      lazy = false,
+      version = false, -- set this to "*" if you want to always pull the latest change, false to update on release
+      opts = {
+          provider = "openai",
+          openai = {
+            endpoint = "https://integrate.api.nvidia.com/v1",
+            model = "nvdev/meta/llama-3.3-70b-instruct",
+          },
+      },
+      -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+      build = "make",
+      -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+      dependencies = {
+        "stevearc/dressing.nvim",
+        "nvim-lua/plenary.nvim",
+        "MunifTanjim/nui.nvim",
+        --- The below dependencies are optional,
+        "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+        "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+        "zbirenbaum/copilot.lua", -- for providers='copilot'
+        {
+          -- support for image pasting
+          "HakonHarnes/img-clip.nvim",
+          event = "VeryLazy",
+          opts = {
+            -- recommended settings
+            default = {
+              embed_image_as_base64 = false,
+              prompt_for_file_name = false,
+              drag_and_drop = {
+                insert_mode = true,
+              },
+              -- required for Windows users
+              use_absolute_path = true,
+            },
+          },
+        },
+        {
+          -- Make sure to set this up properly if you have lazy=true
+          'MeanderingProgrammer/render-markdown.nvim',
+          opts = {
+            file_types = { "markdown", "Avante" },
+          },
+          ft = { "markdown", "Avante" },
+        },
+      },
     }
 })
 
 require'nvim-web-devicons'.get_icons()
+
+require('possession').setup({
+    autosave = {
+        on_quit = true,
+        cwd = function()
+              return not require('possession.session').exists(require('possession.paths').cwd_session_name())
+        end
+    },
+    autoload = 'auto_cwd',
+    commands = {
+        save = 'SSave',
+        load = 'SLoad',
+        delete = 'SDelete',
+        list = 'SList',
+    },
+    plugins = {
+        delete_hidden_buffers = false,
+        delete_buffers = false,
+    },
+})
 
 local lsp_zero = require('lsp-zero')
 lsp_zero.on_attach(function(client, bufnr)
@@ -75,22 +153,25 @@ require('mason-lspconfig').setup({
   },
 })
 
---require('copilot').setup({
---  host = 'http://localhost:5000',
---  model = 'py-model',
---  max_tokens = 100,
---  max_lines = 1000,
---  max_num_results = 4,
---  temperature = 0.6,
---  keymap = {
---    ['<C-Space>'] = '<Plug>(copilot-complete)',
---  }
---})
-
 require('setup-clipboard')
 require('buffer-delete')
 require('bazel')
 require('nav-to-file')
+
+local user = os.getenv("USER")
+if string.match(user, "jaskeland") then
+    -- Add paths to the path used for gf
+    vim.o.path = vim.o.path ..
+        ',' .. vim.fn.expand('avdnn/bazel-bin/') ..
+        ',' .. vim.fn.expand('src/') ..
+        ',' .. vim.fn.expand('bazel-bin/') ..
+        ',' .. vim.fn.expand('bazel-bin/src/') ..
+        ',' .. vim.fn.expand('src/dwcgf/description/') ..
+        ',' .. vim.fn.expand('src/dwroadcast/')
+
+    -- Set the project root environment variable to the value of NV_AV_TOP
+    vim.fn.setenv('PROJECT_ROOT', vim.fn.environ()['NV_AV_TOP'])
+end
 
 -- Concatenate the default statusline with the neotree statusline.
 -- When using `vw [win] <file>`, the `win` number is shown in the statusline
@@ -125,7 +206,7 @@ vim.o.colorcolumn = "81,161,241,321,401,481,561,641,721,801"
 -- Show relative line numbers (move via [count]j or [count]k)
 vim.o.relativenumber = true
 
-vim.o.scrolloff = 100000  -- keep cursor in the middle of the screen
+--vim.o.scrolloff = 100000  -- keep cursor in the middle of the screen
 
 -- Function to trim trailing whitespace
 local function trim_trailing_whitespace()
@@ -152,6 +233,37 @@ vim.api.nvim_create_autocmd("BufEnter", {
         end
     end,
 })
+
+-- Disables automatic transition to terminal mode
+vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = "term://*",
+    callback = function()
+        if vim.bo.buftype == 'terminal' then
+            vim.cmd('stopinsert')
+        end
+    end
+})
+
+-- Function to go to the lowest terminal buffer
+local function go_to_lowest_terminal_buffer()
+  local buffers = vim.tbl_filter(function(buf)
+    return vim.api.nvim_buf_is_valid(buf)
+      and vim.bo[buf].buflisted
+      and vim.bo[buf].buftype == 'terminal'
+  end, vim.api.nvim_list_bufs())
+
+  if #buffers == 0 then
+    print("No terminal buffers found")
+    return
+  end
+
+  local lowest = math.min(unpack(buffers))
+  vim.api.nvim_set_current_buf(lowest)
+end
+
+-- Set up the keymap
+vim.keymap.set('n', '<Leader>t', go_to_lowest_terminal_buffer,
+    { noremap = true, silent = true, desc = "Go to lowest terminal buffer" })
 
 -- Productivity Shortcuts
 local n_keymap = function(lhs, rhs)
@@ -194,6 +306,14 @@ n_keymap('<C-k>', '<C-W>k')  -- window above
 n_keymap('<C-h>', '<C-W>h')  -- window left
 n_keymap('<C-l>', '<C-W>l')  -- window right
 
+-- Tab navigation
+n_keymap('<F5>', ':tabp<CR>')  -- previous tab
+n_keymap('<F6>', ':tabn<CR>')  -- next tab
+
+-- Buffer navigation
+n_keymap('gb', ":bp<CR>")  -- previous buffer (can't use <C-^>; used by mosh)
+n_keymap('gn', ":bn<CR>")  -- next buffer
+
 i_keymap('<C-j>', '<Esc><C-W>j')  -- window below
 i_keymap('<C-k>', '<Esc><C-W>k')  -- window above
 i_keymap('<C-h>', '<Esc><C-W>h')  -- window left
@@ -214,8 +334,7 @@ n_keymap('=', 'o<Esc>k')  -- newline below
 n_keymap('+', 'O<Esc>j')  -- newline above
 
 -- Terminal search
-t_keymap('<F4>', '<C-\\><C-n>?ERROR:.*<CR>/.* error:<CR>0')
-n_keymap('<F4>', '?ERROR:.*<CR>/.* error:<CR>0')
+t_keymap('<F4>', '<C-\\><C-n>?ERROR:.*Compiling<CR>/: error:<CR>0')
 
 -- Remap <C-d> in terminal so we don't accidentally close the shell
 t_keymap('<C-d>', '<Plug>x')
@@ -239,3 +358,17 @@ n_keymap('_b', [[:let @+ = expand('%:~:.') . ':' . line('.')<CR>]])
 -- TODO figure out why neotree icons aren't working
 -- TODO determine why shift-<Space> in a terminal window is causing strange
 --      behavior
+
+-- For neovide
+vim.env.TERM = "xterm-256color"
+
+local function pasteFromClipboard()
+    local clipboard_content = vim.fn.getreg('+') -- '+' is the system clipboard register
+    vim.api.nvim_put({ clipboard_content }, 'l', true, true)
+end
+vim.keymap.set('t', '<D-v>', pasteFromClipboard, { silent = true, noremap = true })
+
+vim.g.neovide_input_use_logo = false
+vim.g.neovide_scroll_animation_length = 0.1
+vim.g.neovide_position_animation_length = 0.1
+vim.g.neovide_window_blurred = false

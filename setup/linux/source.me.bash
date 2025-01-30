@@ -1,5 +1,12 @@
 # Intended to be sourced via ~/.bashrc
 
+GDB_BT_ON_THROW="gdb -batch -ex 'cd $PWD' -ex 'catch throw' -ex 'run' -ex 'bt' -ex 'quit' --args"
+
+ssh_client() {
+    # grab the ip from $SSH_CLIENT and output it
+    echo $SSH_CLIENT | awk '{print $1}'
+}
+
 git_context_search() {
     local this_directory_path=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
     $this_directory_path/../../scripts/git_context_search.py "$@"

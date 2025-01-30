@@ -1,9 +1,42 @@
+local function ExtractNumberAfterColon()
+    -- Get the current line and cursor position
+    local line = vim.api.nvim_get_current_line()
+    local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
+
+    -- Extract text from cursor position to the end of the line
+    local text_after_cursor = line:sub(cursor_col + 1)
+
+    -- Find the next colon
+    local colon_index = text_after_cursor:find(":")
+
+    if not colon_index then
+        -- No colon found after the cursor, return an error or handle appropriately
+        vim.notify("No colon found after the cursor.", vim.log.levels.ERROR)
+        return nil
+    end
+
+    -- Extract the text after the colon
+    local text_after_colon = text_after_cursor:sub(colon_index + 1)
+
+    -- Find the first sequence of digits (assuming this is what you mean by "number")
+    local number_match = text_after_colon:match("%d+")
+
+    if not number_match then
+        -- No number found after the colon, return an error or handle appropriately
+        vim.notify("No number found after the colon.", vim.log.levels.ERROR)
+        return nil
+    end
+
+    -- Return the extracted number
+    return tonumber(number_match)
+end
+
 function OpenFileAtLineInWindow(window_number)
-    local file_and_line = vim.fn.expand('<cfile>')
+    local file = vim.fn.expand('<cfile>')
+    local line = ExtractNumberAfterColon()
     vim.api.nvim_command(window_number .. 'wincmd w')
-    local file = vim.fn.matchstr(file_and_line, '^\\S\\+')
-    local line = vim.fn.matchstr(file_and_line, ':\\zs\\d\\+\\ze')
-    vim.api.nvim_command('edit +' .. line .. ' ' .. file)
+    vim.api.nvim_command('edit ' .. file)
+    vim.api.nvim_win_call(0, function() vim.fn.cursor(line, 1) end)
 end
 
 vim.api.nvim_set_keymap('n', '<Leader>w1', ':lua OpenFileAtLineInWindow(1)<CR>', { noremap = true, silent = true })
