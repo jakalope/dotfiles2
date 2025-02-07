@@ -11,7 +11,6 @@ local function ExtractNumberAfterColon()
 
     if not colon_index then
         -- No colon found after the cursor, return an error or handle appropriately
-        vim.notify("No colon found after the cursor.", vim.log.levels.ERROR)
         return nil
     end
 
@@ -23,7 +22,6 @@ local function ExtractNumberAfterColon()
 
     if not number_match then
         -- No number found after the colon, return an error or handle appropriately
-        vim.notify("No number found after the colon.", vim.log.levels.ERROR)
         return nil
     end
 
@@ -36,7 +34,10 @@ function OpenFileAtLineInWindow(window_number)
     local line = ExtractNumberAfterColon()
     vim.api.nvim_command(window_number .. 'wincmd w')
     vim.api.nvim_command('edit ' .. file)
-    vim.api.nvim_win_call(0, function() vim.fn.cursor(line, 1) end)
+    -- Move the cursor to the specified line if line is not nil
+    if line then
+        vim.api.nvim_win_call(0, function() vim.fn.cursor(line, 1) end)
+    end
 end
 
 vim.api.nvim_set_keymap('n', '<Leader>w1', ':lua OpenFileAtLineInWindow(1)<CR>', { noremap = true, silent = true })

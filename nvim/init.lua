@@ -66,6 +66,8 @@ require("lazy").setup({
           openai = {
             endpoint = "https://integrate.api.nvidia.com/v1",
             model = "nvdev/meta/llama-3.3-70b-instruct",
+            -- model = "nvdev/deepseek-ai/deepseek-r1",
+            -- temperature = 0.6,
           },
       },
       -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`

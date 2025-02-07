@@ -2,6 +2,19 @@
 
 GDB_BT_ON_THROW="gdb -batch -ex 'cd $PWD' -ex 'catch throw' -ex 'run' -ex 'bt' -ex 'quit' --args"
 
+cdlist() {
+    # Run the `dirs` builtin and store the output in an array
+    dirs=($(dirs -l -p))
+
+    for i in "${!dirs[@]}"; do
+      printf "%s) %s\n" "$i" "${dirs[$i]}"
+    done
+    read -p "Select a directory: " dir
+
+    # Change the user's current directory to the selected one
+    cd "${dirs[$dir]}"
+}
+
 ssh_client() {
     # grab the ip from $SSH_CLIENT and output it
     echo $SSH_CLIENT | awk '{print $1}'
