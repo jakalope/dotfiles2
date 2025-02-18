@@ -47,7 +47,7 @@ gitsubject() {
 
 # Print all untracked files.
 untracked() {
-    git status --porcelain | grep '^\?' | awk '{print $2}'
+    git status --porcelain --untracked-files=all | grep '^\?' | awk '{print $2}'
 }
 
 # Print all added and modified files [since refspec]

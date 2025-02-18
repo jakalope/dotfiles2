@@ -21,12 +21,6 @@ vim.g.neovide_scroll_animation_far_lines = 0
 require("lazy").setup({
     "tpope/vim-fugitive", -- Git integration
     "tpope/vim-abolish",  -- Change word case (e.g. crs for snake_case)
-    {
-        'jedrzejboczar/possession.nvim',
-        dependencies = {
-            'nvim-lua/plenary.nvim'
-        },
-    },
     "nikvdp/neomux",  -- Control neovim from its terminal and vice versa
     "ggandor/leap.nvim",  -- Speed up f/F/t/T motions
     -- "justinmk/vim-sneak",  -- Speed up f/F/t/T motions
@@ -37,16 +31,6 @@ require("lazy").setup({
     "williamboman/mason-lspconfig.nvim",
     "neovim/nvim-lspconfig",
     "github/copilot.vim",
-    {
-        "nvim-neo-tree/neo-tree.nvim",
-        branch = "v3.x",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-tree/nvim-web-devicons", -- not strictly required
-            "MunifTanjim/nui.nvim",
-            "3rd/image.nvim", -- See `# Preview Mode` for more information
-        }
-    },-- 📂
     {
       "ibhagwan/fzf-lua",
       -- optional for icon support
@@ -112,26 +96,6 @@ require("lazy").setup({
 
 require'nvim-web-devicons'.get_icons()
 
-require('possession').setup({
-    autosave = {
-        on_quit = true,
-        cwd = function()
-              return not require('possession.session').exists(require('possession.paths').cwd_session_name())
-        end
-    },
-    autoload = 'auto_cwd',
-    commands = {
-        save = 'SSave',
-        load = 'SLoad',
-        delete = 'SDelete',
-        list = 'SList',
-    },
-    plugins = {
-        delete_hidden_buffers = false,
-        delete_buffers = false,
-    },
-})
-
 local lsp_zero = require('lsp-zero')
 lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
@@ -190,8 +154,12 @@ vim.fn.setenv('NVIM_LISTEN_ADDRESS', vim.v.servername)
 --
 
 vim.cmd.colorscheme('slate')  -- set colorscheme
-vim.cmd('highlight TermCursor ctermfg=red guifg=red')
-vim.cmd('highlight Cursor ctermfg=yellow guifg=yellow')
+vim.opt.background = 'dark'
+vim.cmd([[
+  highlight TermCursor guifg=red guibg=red
+  highlight Cursor guifg=yellow guibg=yellow
+  highlight MatchParen ctermbg=NONE guibg=NONE ctermfg=lightgreen guifg=lightgreen
+]])
 
 vim.o.hlsearch = false    -- don't highlight search results
 
@@ -344,6 +312,7 @@ t_keymap('<C-;>', '<C-d>')
 
 -- Delete the current buffer without closing the current window
 n_keymap('<F9><F9>', ':Bdelete<CR>')
+n_keymap('<F9><F10>', ':Bdelete!<CR>')
 
 -- Source this file
 n_keymap('<F12>', ':source ~/dotfiles2/nvim/init.lua<CR>')
@@ -351,18 +320,18 @@ n_keymap('<F12>', ':source ~/dotfiles2/nvim/init.lua<CR>')
 -- Visual block mode when terminal thinks <C-v> is paste
 n_keymap('<C-y>', '<C-v>')
 
--- Copy the name of the current file
+-- Copy the path of the current buffer
 n_keymap('_y', ':let @"=@%<CR>:let @+=@%<CR>')
 
--- Copy the name of the current file:line; useful for setting breakpoints
+-- Copy the current buffer's file:line; useful for setting breakpoints
 n_keymap('_b', [[:let @+ = expand('%:~:.') . ':' . line('.')<CR>]])
 
--- TODO figure out why neotree icons aren't working
--- TODO determine why shift-<Space> in a terminal window is causing strange
---      behavior
-
 -- For neovide
-vim.env.TERM = "xterm-256color"
+-- vim.env.TERM = "xterm-256color"
+-- vim.opt.termguicolors = true
+
+-- TODO determine why shift-<Space> in a terminal window is causing strange
+--      behavior in neovide
 
 local function pasteFromClipboard()
     local clipboard_content = vim.fn.getreg('+') -- '+' is the system clipboard register
