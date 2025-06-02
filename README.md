@@ -26,7 +26,7 @@ ssh -L 2489:localhost:2489 $REMOTE \
 /Applications/Neovide.app/Contents/MacOS/neovide --server localhost:2489
 ```
 
-- Open vertical splits `:vs:vs`
+- Open vertical splits `:vs<CR>:vs<CR>`
 - Start a shell on one split `\sh`
 - Open a horizontal split `:sp`
 - Start a shell there `\sh`

@@ -19,18 +19,22 @@ vim.g.neomux_term_sizefix_map = "<Plug><C-3>"  -- because <C-w>= is useful
 vim.g.neovide_scroll_animation_far_lines = 0
 
 require("lazy").setup({
-    "tpope/vim-fugitive", -- Git integration
-    "tpope/vim-abolish",  -- Change word case (e.g. crs for snake_case)
-    "nikvdp/neomux",  -- Control neovim from its terminal and vice versa
-    "ggandor/leap.nvim",  -- Speed up f/F/t/T motions
-    -- "justinmk/vim-sneak",  -- Speed up f/F/t/T motions
-    "tpope/vim-repeat",  -- Make plugins repeatable with . (leap dep)
-    "moll/vim-bbye",  -- Bdelete, remove buffers w/o affecting splits
+    "tpope/vim-fugitive",
+    "tpope/vim-abolish",
+    "nikvdp/neomux",
+    "ggandor/leap.nvim",
+    "tpope/vim-repeat",
+    "moll/vim-bbye",
     "VonHeikemen/lsp-zero.nvim",
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
-    "neovim/nvim-lspconfig",
+    "nvim-treesitter/nvim-treesitter",
     "github/copilot.vim",
+    {
+        "mason-org/mason-lspconfig.nvim",
+        dependencies = {
+            { "mason-org/mason.nvim", opts = {} },
+            "neovim/nvim-lspconfig",
+        },
+    },
     {
       "ibhagwan/fzf-lua",
       -- optional for icon support
@@ -60,6 +64,7 @@ require("lazy").setup({
       dependencies = {
         "stevearc/dressing.nvim",
         "nvim-lua/plenary.nvim",
+        "nvim-treesitter/nvim-treesitter",
         "MunifTanjim/nui.nvim",
         --- The below dependencies are optional,
         "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
@@ -112,12 +117,7 @@ lsp_zero.set_sign_icons({
 require('mason').setup({
   PATH = "append",  -- Search venv path before masonpath when looking for config
 })
-require('mason-lspconfig').setup({
-  ensure_installed = {},
-  handlers = {
-    lsp_zero.default_setup,
-  },
-})
+require('lspconfig').pylsp.setup({})
 
 require('setup-clipboard')
 require('buffer-delete')
@@ -328,7 +328,7 @@ n_keymap('_b', [[:let @+ = expand('%:~:.') . ':' . line('.')<CR>]])
 
 -- For neovide
 -- vim.env.TERM = "xterm-256color"
--- vim.opt.termguicolors = true
+vim.opt.termguicolors = false  -- TODO this should be true if using neovide
 
 -- TODO determine why shift-<Space> in a terminal window is causing strange
 --      behavior in neovide
