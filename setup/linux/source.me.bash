@@ -152,3 +152,8 @@ append_line_if_missing() {
         echo "$1" >> ~/.bashrc
     fi
 }
+
+# Set NVIM_LISTEN_ADDRESS if we're in a Neovim terminal
+if [ -n "$NVIM" ]; then
+    export NVIM_LISTEN_ADDRESS="$NVIM"
+fi

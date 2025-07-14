@@ -18,6 +18,8 @@ vim.g.neomux_term_sizefix_map = "<Plug><C-3>"  -- because <C-w>= is useful
 
 vim.g.neovide_scroll_animation_far_lines = 0
 
+local user = os.getenv("USER")
+
 require("lazy").setup({
     "tpope/vim-fugitive",
     "tpope/vim-abolish",
@@ -37,71 +39,15 @@ require("lazy").setup({
     },
     {
       "ibhagwan/fzf-lua",
-      -- optional for icon support
-      dependencies = { "nvim-tree/nvim-web-devicons" },
-      config = function()
-        -- calling `setup` is optional for customization
-        require("fzf-lua").setup({})
-      end
-    },
-    {
-      "yetone/avante.nvim",
-      event = "VeryLazy",
-      lazy = false,
-      version = false, -- set this to "*" if you want to always pull the latest change, false to update on release
-      opts = {
-          privder = "openai",
-          providers = {
-            openai = {
-              endpoint = "https://integrate.api.nvidia.com/v1",
-              model = "nvdev/meta/llama-3.3-70b-instruct",
-              -- model = "nvdev/deepseek-ai/deepseek-r1",
-              -- temperature = 0.6,
-            }
-          },
-      },
-      -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-      build = "make",
-      -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
-      dependencies = {
-        "stevearc/dressing.nvim",
-        "nvim-lua/plenary.nvim",
-        "nvim-treesitter/nvim-treesitter",
-        "MunifTanjim/nui.nvim",
-        --- The below dependencies are optional,
-        "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-        "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-        "zbirenbaum/copilot.lua", -- for providers='copilot'
-        {
-          -- support for image pasting
-          "HakonHarnes/img-clip.nvim",
-          event = "VeryLazy",
-          opts = {
-            -- recommended settings
-            default = {
-              embed_image_as_base64 = false,
-              prompt_for_file_name = false,
-              drag_and_drop = {
-                insert_mode = true,
-              },
-              -- required for Windows users
-              use_absolute_path = true,
-            },
-          },
-        },
-        {
-          -- Make sure to set this up properly if you have lazy=true
-          'MeanderingProgrammer/render-markdown.nvim',
-          opts = {
-            file_types = { "markdown", "Avante" },
-          },
-          ft = { "markdown", "Avante" },
-        },
-      },
+      opts = {}
     }
 })
 
-require'nvim-web-devicons'.get_icons()
+vim.keymap.set('i', '<C-Space>', 'copilot#Accept("\\<CR>")', {
+  expr = true,
+  replace_keycodes = false
+})
+vim.g.copilot_no_tab_map = true
 
 local lsp_zero = require('lsp-zero')
 lsp_zero.on_attach(function(client, bufnr)
@@ -109,12 +55,6 @@ lsp_zero.on_attach(function(client, bufnr)
   -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
-lsp_zero.set_sign_icons({
-  error = '✘',
-  warn = '▲',
-  hint = '⚑',
-  info = '»'
-})
 
 require('mason').setup({
   PATH = "append",  -- Search venv path before masonpath when looking for config
@@ -126,7 +66,6 @@ require('buffer-delete')
 require('bazel')
 require('nav-to-file')
 
-local user = os.getenv("USER")
 if string.match(user, "jaskeland") then
     -- Add paths to the path used for gf
     vim.o.path = vim.o.path ..
@@ -145,9 +84,6 @@ end
 -- When using `vw [win] <file>`, the `win` number is shown in the statusline
 vim.o.statusline = '∥ W:[%{WindowNumber()}] ∥ ' ..
         '%{expand("%:p")}%h%m%r%=%-14.(%l,%c%V%)%P'
-
--- Prepare neovim to be controlled from its terminal via neomux
-vim.fn.setenv('NVIM_LISTEN_ADDRESS', vim.v.servername)
 
 --local leap = require('leap')
 --leap.opts.highlight_unlabeled_phase_one_targets = true
@@ -177,8 +113,6 @@ vim.o.colorcolumn = "81,161,241,321,401,481,561,641,721,801"
 
 -- Show relative line numbers (move via [count]j or [count]k)
 vim.o.relativenumber = true
-
---vim.o.scrolloff = 100000  -- keep cursor in the middle of the screen
 
 -- Function to trim trailing whitespace
 local function trim_trailing_whitespace()
@@ -267,8 +201,8 @@ vim.api.nvim_set_keymap('n', '_z', '', {
 n_keymap('<Leader>d', ':lua vim.lsp.buf.definition()<CR>') -- jump to def
 n_keymap('<Leader>h', ':ClangdSwitchSourceHeader<CR>')     -- jump src/header
 n_keymap('<Leader>f', ":FzfLua files<CR>")                 -- fuzzy find files
-n_keymap('<Leader>g', ":FzfLua git_files<CR>")             -- fuzzy find git
 n_keymap('<Leader>b', ":FzfLua buffers<CR>")               -- fuzzy find buffers
+n_keymap('<Leader>g', ":FzfLua git_files<CR>")             -- fuzzy find git
 n_keymap('<leader>s', ":Neotree float git_status<cr>")
 n_keymap('<Leader><Leader>', ':Neotree toggle<CR>')        -- toggle neotree
 
