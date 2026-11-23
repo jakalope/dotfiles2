@@ -62,7 +62,7 @@ end)
 require('mason').setup({
   PATH = "append",  -- Search venv path before masonpath when looking for config
 })
-require('lspconfig').pylsp.setup({})
+vim.lsp.enable('pylsp')  -- nvim 0.11+ API; config comes from nvim-lspconfig's lsp/pylsp.lua
 
 require('setup-clipboard')
 require('buffer-delete')
@@ -252,6 +252,8 @@ t_keymap('<F4>', '<C-\\><C-n>?ERROR:.*Compiling<CR>/: error:<CR>0')
 local shell_name = vim.fn.fnamemodify(vim.o.shell, ':t')
 if shell_name == 'zsh' or shell_name == 'bash' then
     vim.o.shell = vim.o.shell .. ' -o emacs -o ignoreeof'
+    -- neomux launches terminals with `term! $SHELL`, bypassing 'shell'.
+    vim.g.neomux_default_shell = vim.o.shell
 end
 
 -- Delete the current buffer without closing the current window

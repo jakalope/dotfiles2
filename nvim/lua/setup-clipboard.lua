@@ -80,7 +80,8 @@ local function detect_environment()
         print("OS: " .. os_name .. " uname: " .. uname)
         return
     end
-    print("Using clipboard: " .. vim.g.clipboard.name)
+    -- Selected clipboard is visible via :let g:clipboard (no startup message,
+    -- which would otherwise stack with others into a hit-enter prompt).
 end
 
 -- Call the function to detect the environment

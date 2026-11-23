@@ -8,7 +8,7 @@ vim.o.softtabstop = 4     -- insert/delete <Space> N chars with <Tab>/<BS>
 vim.o.relativenumber = true
 
 local function set_colorcolumn_from_pycodestyle()
-    local handle = io.popen("grep '^max-line-length' ~/.config/pycodestyle | cut -d '=' -f2 | tr -d ' '")
+    local handle = io.popen("grep '^max-line-length' ~/.config/pycodestyle 2>/dev/null | cut -d '=' -f2 | tr -d ' '")
     local max_length = handle:read("*a")
     handle:close()
 
