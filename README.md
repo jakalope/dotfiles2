@@ -11,6 +11,21 @@ chmod +x setup.ubuntu.bash
 popd
 ```
 
+## macOS
+
+Needs an SSH key on GitHub first (the script tells you how if it's missing).
+Safe to re-run; each step skips what's already done.
+
+```
+curl -fsSLO https://raw.githubusercontent.com/jakalope/dotfiles2/main/setup/darwin/setup.darwin.zsh
+zsh setup.darwin.zsh
+```
+
+It installs Homebrew, Neovim, fzf, mosh and Karabiner-Elements, and links
+`~/.config/nvim` and `~/.config/karabiner` into this repo. Shared zsh settings
+live in `zsh/zshrc.zsh`, sourced from `~/.zshrc`. After the first run, open
+Karabiner-Elements once and approve its prompts in System Settings.
+
 # Remote Work
 
 ## Tunnel into REMOTE and launch neovim server

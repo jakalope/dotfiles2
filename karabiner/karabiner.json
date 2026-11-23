@@ -1,0 +1,143 @@
+{
+    "profiles": [
+        {
+            "complex_modifications": {
+                "rules": [
+                    {
+                        "description": "Change caps_lock to control if pressed with other keys, to escape if pressed alone.",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "caps_lock",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_control"
+                                    }
+                                ],
+                                "to_if_alone": [
+                                    {
+                                        "key_code": "escape"
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Option-F/B/D: emacs word motion (forward/back/delete word), except in terminals",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "f",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "option"
+                                        ],
+                                        "optional": [
+                                            "shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "right_arrow",
+                                        "modifiers": [
+                                            "option"
+                                        ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_unless",
+                                        "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
+                                            "^com\\.googlecode\\.iterm2$",
+                                            "^com\\.apple\\.Terminal$"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "b",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "option"
+                                        ],
+                                        "optional": [
+                                            "shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_arrow",
+                                        "modifiers": [
+                                            "option"
+                                        ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_unless",
+                                        "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
+                                            "^com\\.googlecode\\.iterm2$",
+                                            "^com\\.apple\\.Terminal$"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "d",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "option"
+                                        ],
+                                        "optional": [
+                                            "shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "delete_forward",
+                                        "modifiers": [
+                                            "option"
+                                        ]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_unless",
+                                        "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
+                                            "^com\\.googlecode\\.iterm2$",
+                                            "^com\\.apple\\.Terminal$"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "name": "Default profile",
+            "selected": true,
+            "virtual_hid_keyboard": {
+                "country_code": 0,
+                "keyboard_type_v2": "ansi"
+            }
+        }
+    ]
+}

@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
+# Install Homebrew if needed and put it on PATH for login shells.
 set -euo pipefail
+source "${DOTFILES:-$HOME/dotfiles2}/setup/darwin/lib.sh"
 
-if [ ! -e /opt/homebrew/bin/brew ]; then
+brew_bin=""
+for b in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+    if [ -x "$b" ]; then brew_bin=$b; break; fi
+done
+
+if [ -z "$brew_bin" ]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    for b in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+        if [ -x "$b" ]; then brew_bin=$b; break; fi
+    done
 fi
 
-echo $PATH | grep homebrew
-failure=$?
-if [ $failure ]; then
-    (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> ${HOME}/.zprofile
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
+append_line_if_missing "$HOME/.zprofile" "eval \"\$($brew_bin shellenv)\""
