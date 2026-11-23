@@ -33,12 +33,6 @@ if [ ! -d "$HOME/.local/share/nvim/site" ]; then
     ln -s "$HOME/dotfiles2/nvim/site" "$XDG_LOCAL_HOME/share/nvim/" || true
 fi
 
-if [ ! -d ~/.config/nvim/pack/github/start/copilot.vim ]; then
-    echo Installing copilot...
-    git clone https://github.com/github/copilot.vim \
-       ~/.config/nvim/pack/github/start/copilot.vim
-fi
-
 if [ ! -d ~/.config/nvim/autoload/plug.vim ]; then
     echo Installing vim-plug...
     sh -c 'curl -fLo \

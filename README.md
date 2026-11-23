@@ -103,7 +103,6 @@ ssh -R 2489:127.0.0.1:2489 user@host
 :help neomux
 :help leap-default-mappings
 :help lsp-zero-keybindings
-:help copilot-maps
 ```
 
 ### Custom remappings

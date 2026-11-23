@@ -26,10 +26,10 @@ require("lazy").setup({
     "nikvdp/neomux",
     "ggandor/leap.nvim",
     "tpope/vim-repeat",
+    "tpope/vim-rsi",  -- readline chords (C-a, C-e, M-b, M-f, ...) in : and insert mode
     "moll/vim-bbye",
     "VonHeikemen/lsp-zero.nvim",
     "nvim-treesitter/nvim-treesitter",
-    "github/copilot.vim",
     {
         "mason-org/mason-lspconfig.nvim",
         dependencies = {
@@ -51,12 +51,6 @@ require("lazy").setup({
       end
     }
 })
-
-vim.keymap.set('i', '<C-Space>', 'copilot#Accept("\\<CR>")', {
-  expr = true,
-  replace_keycodes = false
-})
-vim.g.copilot_no_tab_map = true
 
 local lsp_zero = require('lsp-zero')
 lsp_zero.on_attach(function(client, bufnr)
@@ -251,9 +245,14 @@ n_keymap('+', 'O<Esc>j')  -- newline above
 -- Terminal search
 t_keymap('<F4>', '<C-\\><C-n>?ERROR:.*Compiling<CR>/: error:<CR>0')
 
--- Remap <C-d> in terminal so we don't accidentally close the shell
-t_keymap('<C-d>', '<Plug>x')
-t_keymap('<C-;>', '<C-d>')
+-- Terminal shells: keep normal readline/emacs chords (C-a, C-e, C-k, C-d, ...).
+--   -o emacs:     neomux sets $EDITOR to a path under .../nvim/..., and zsh
+--                 switches to vi keymap whenever $EDITOR contains "vi".
+--   -o ignoreeof: <C-d> on an empty prompt won't close the shell (use `exit`).
+local shell_name = vim.fn.fnamemodify(vim.o.shell, ':t')
+if shell_name == 'zsh' or shell_name == 'bash' then
+    vim.o.shell = vim.o.shell .. ' -o emacs -o ignoreeof'
+end
 
 -- Delete the current buffer without closing the current window
 n_keymap('<F9><F9>', ':Bdelete<CR>')

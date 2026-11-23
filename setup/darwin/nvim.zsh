@@ -18,16 +18,6 @@ if [ ! -d "$HOME/.local/share/nvim/site" ]; then
     ln -s "$HOME/dotfiles2/nvim/site" "$XDG_LOCAL_HOME/share/nvim/" || true
 fi
 
-if [ ! -d ~/.config/nvim/pack/github/start/copilot.vim ]; then
-    git clone https://github.com/github/copilot.vim \
-       ~/.config/nvim/pack/github/start/copilot.vim
-fi
-
-if [ ! -d ~/.config/nvim/pack/github/start/copilot.vim ]; then
-    git clone https://github.com/github/copilot.vim \
-       ~/.config/nvim/pack/github/start/copilot.vim
-fi
-
 if [ ! -d ~/.config/nvim/autoload/plug.vim ]; then
     sh -c 'curl -fLo \
         ~/.config/nvim/autoload/plug.vim --create-dirs \
